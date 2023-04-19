@@ -7,8 +7,10 @@ const expressjwt = require('express-jwt')
 const cors = require('cors')
 
 // 自定义模块
-var indexRouter = require('./routes/index')
+var homeRouter = require('./routes/home')
 var usersRouter = require('./routes/users')
+var menuRouter = require('./routes/menu')
+var roleRouter = require('./routes/roles')
 
 var app = express()
 
@@ -31,9 +33,11 @@ app.use(cors())
 //   path: [ /^\/images\//]  // 指定路径不经过 Token 解析
 // }))
 
-// 路由前缀地址
-app.use('/', indexRouter)
+// 使用路由前缀地址
+app.use('/', homeRouter)
 app.use('/users', usersRouter)
+app.use('/menu', menuRouter)
+app.use('/role', roleRouter)
 
 //404 错误
 app.use(function (req, res, next) {
