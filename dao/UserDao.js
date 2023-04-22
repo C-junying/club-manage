@@ -9,36 +9,43 @@ const getCount = () => {
   const sql = 'SELECT count(*) as count FROM user'
   return BaseDao.execute(sql)
 }
+// 分页查询
+const getListByPage = (pageNum, pageSize) => {
+  const sql =
+    'SELECT DISTINCT u.*,r.* from user u LEFT JOIN play_role ur on u.user_id = ur.user_id LEFT JOIN role r on ur.role_id = r.role_id ORDER BY u.user_id limit ?,?'
+  const params = [(pageNum - 1) * pageSize, pageSize]
+  return BaseDao.execute(sql, params)
+}
 //登录
 const login = (user) => {
   const sql =
-    'SELECT DISTINCT u.*,r.* from user u LEFT JOIN user_role ur on u.userId = ur.userId LEFT JOIN role r on ur.roleId = r.roleId where u.email=?'
-  const params = [user.email]
+    'SELECT DISTINCT u.*,r.* from user u LEFT JOIN play_role ur on u.user_id = ur.user_id LEFT JOIN role r on ur.role_id = r.role_id where u.email=?||u.phone=?||u.user_id=?'
+  const params = [user.email, user.phone, user.userId]
   return BaseDao.execute(sql, params)
 }
 // 注册
 const register = (user) => {
   const arr = [
     {
-      sql: 'insert into user(userName, password, email, createTime) values(?,?,?,?)',
-      params: [user.userName, user.password, user.email, user.createTime],
+      sql: 'insert into user(user_id,password,nickname,phone, email, regist_time) values(?,?,?,?,?,?)',
+      params: [user.userId, user.password, user.nickname, user.phone, user.email, user.createTime],
     },
     {
-      sql: 'insert into user_role(userId,roleId) values(?,?)',
+      sql: 'insert into play_role(user_id,role_id) values(?,?)',
       params: [user.userId, user.roleId],
     },
   ]
-  return BaseDao.execTransectionByReturnId(arr)
+  return BaseDao.execTransection(arr)
 }
 // 删除用户
 const deleteUser = (user) => {
   const arr = [
     {
-      sql: 'delete from user where user_id = ?',
+      sql: 'delete from play_role where user_id = ?',
       params: [user.userId],
     },
     {
-      sql: 'delete from play_role where user_id = ?',
+      sql: 'delete from user where user_id = ?',
       params: [user.userId],
     },
   ]
@@ -48,11 +55,38 @@ const deleteUser = (user) => {
 const updatePassword = (user) => {
   const arr = [
     {
-      sql: 'update user set password=? where userId=?',
+      sql: 'update user set password=? where user_id=?',
       params: [user.password, user.userId],
     },
   ]
   return BaseDao.execTransection(arr)
 }
-
+// 编辑用户
+const updateUser = (user) => {
+  const arr = [
+    {
+      sql: 'update user set password=?,nickname=?,userName=?,sex=?,phone=?,email=?,picture=?,intro=?,regist_time=? where user_id=?',
+      params: [
+        user.password,
+        user.nickname,
+        user.userName,
+        user.sex,
+        user.email,
+        user.picture,
+        user.intro,
+        user.createTime,
+        user.userId,
+      ],
+    },
+    {
+      sql: 'delete from user_role where user_id = ?',
+      params: [user.userId],
+    },
+    {
+      sql: 'insert into user_role(user_id,role_id,remark) values(?,?,?)',
+      params: [user.userId, user.roleId, user.remark],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 module.exports = { queryAll, getCount, deleteUser, updatePassword }
