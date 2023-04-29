@@ -1,6 +1,6 @@
 function menuTree(arr) {
   let tree = arr.filter((item) => {
-    if (item['parent_id'] == null || item['parent_id'] == undefined) {
+    if (item['parent_id'] == null || item['parent_id'] == undefined || item['parent_id'] == '') {
       return true
     } else {
       for (let i = 0; i < arr.length; i++) {
@@ -13,4 +13,19 @@ function menuTree(arr) {
   })
   return tree
 }
-module.exports = { menuTree }
+function menuSortTree(arr) {
+  // 对整体排序
+  arr.sort((a, b) => b.sort - a.sort)
+  // 再对儿子排序
+  arr.forEach((val) => {
+    if (val.menus != undefined && val.menus != null) {
+      val.menus.sort((a, b) => b.sort - a.sort)
+    }
+  })
+}
+function menuOrderTree(arr) {
+  let tree = menuTree(arr)
+  menuSortTree(tree)
+  return tree
+}
+module.exports = { menuOrderTree }

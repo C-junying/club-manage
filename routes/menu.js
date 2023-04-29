@@ -4,15 +4,14 @@ var router = express.Router()
 // 导入路由处理函数
 const menuHandler = require('../routes_handler/menu')
 
-// 获取所有菜单，角色需要
+// 获取所有菜单，树化
 router.post('/roleSelect', menuHandler.roleSelect)
 
 // 根据token角色获得菜单
 router.post('/menuList', menuHandler.menuTokenList)
 
-// 根据roleId角色获得菜单
-router.post('/roleIdMenuList'.menuHandler.roleIdMenuList)
-
+//根据roleId角色获得菜单
+router.post('/roleIdMenu', menuHandler.roleIdMenu)
 // 菜单列表
 router.post('/getListByPage', menuHandler.getListByPage)
 

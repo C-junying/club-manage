@@ -1,7 +1,8 @@
 const BaseDao = require('./BaseDao')
 //查询所有⽤户
 const queryAll = () => {
-  const sql = 'select * from user'
+  const sql =
+    'SELECT DISTINCT u.*,r.* from user u LEFT JOIN play_role ur on u.user_id = ur.user_id LEFT JOIN role r on ur.role_id = r.role_id'
   return BaseDao.execute(sql)
 }
 // 查询用户总数
@@ -25,10 +26,24 @@ const login = (user) => {
 }
 // 注册
 const register = (user) => {
+  if (user.roleId === undefined || user.roleId === '') {
+    user.roleId = '202304191414070004'
+  }
   const arr = [
     {
-      sql: 'insert into user(user_id,password,nickname,phone, email, regist_time) values(?,?,?,?,?,?)',
-      params: [user.userId, user.password, user.nickname, user.phone, user.email, user.createTime],
+      sql: 'insert into user(user_id,password,nickname,user_name,sex,phone, email,picture,intro, regist_time) values(?,?,?,?,?,?,?,?,?,?)',
+      params: [
+        user.userId,
+        user.password,
+        user.nickname,
+        user.userName,
+        user.sex,
+        user.phone,
+        user.email,
+        user.picture,
+        user.intro,
+        user.createTime,
+      ],
     },
     {
       sql: 'insert into play_role(user_id,role_id) values(?,?)',
@@ -65,12 +80,13 @@ const updatePassword = (user) => {
 const updateUser = (user) => {
   const arr = [
     {
-      sql: 'update user set password=?,nickname=?,userName=?,sex=?,phone=?,email=?,picture=?,intro=?,regist_time=? where user_id=?',
+      sql: 'update user set password=?,nickname=?,user_name=?,sex=?,phone=?,email=?,picture=?,intro=?,regist_time=? where user_id=?',
       params: [
         user.password,
         user.nickname,
         user.userName,
         user.sex,
+        user.phone,
         user.email,
         user.picture,
         user.intro,
@@ -79,14 +95,30 @@ const updateUser = (user) => {
       ],
     },
     {
-      sql: 'delete from user_role where user_id = ?',
+      sql: 'delete from play_role where user_id = ?',
       params: [user.userId],
     },
     {
-      sql: 'insert into user_role(user_id,role_id,remark) values(?,?,?)',
-      params: [user.userId, user.roleId, user.remark],
+      sql: 'insert into play_role(user_id,role_id,remark) values(?,?,?)',
+      params: [user.userId, user.roleId, null],
     },
   ]
   return BaseDao.execTransection(arr)
 }
-module.exports = { queryAll, getCount, deleteUser, updatePassword }
+// 对用户模糊查询
+const getSearch = (keywords) => {
+  const sql = 'select * from user where CONCAT_WS(nickname,user_name,phone,email) REGEXP ?'
+  const params = [keywords]
+  return BaseDao.execute(sql, params)
+}
+module.exports = {
+  queryAll,
+  getCount,
+  getListByPage,
+  login,
+  register,
+  deleteUser,
+  updatePassword,
+  updateUser,
+  getSearch,
+}

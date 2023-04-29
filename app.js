@@ -5,12 +5,12 @@ var logger = require('morgan')
 const bodyParser = require('body-parser')
 const expressjwt = require('express-jwt')
 const cors = require('cors')
-
 // 自定义模块
 var homeRouter = require('./routes/home')
 var usersRouter = require('./routes/users')
 var menuRouter = require('./routes/menu')
 var roleRouter = require('./routes/roles')
+var fileRouter = require('./routes/file')
 
 var app = express()
 
@@ -18,7 +18,6 @@ app.use(logger('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
 //将静态资源托管，这样才能在浏览器上直接访问预览图片或则html页面
 app.use(express.static(path.join(__dirname, './public')))
 // 跨域
@@ -38,6 +37,7 @@ app.use('/', homeRouter)
 app.use('/users', usersRouter)
 app.use('/menu', menuRouter)
 app.use('/role', roleRouter)
+app.use('/image', fileRouter)
 
 //404 错误
 app.use(function (req, res, next) {

@@ -12,10 +12,15 @@ function myTime(dt) {
   const ss = padZone(dt.getSeconds())
   return `${y}${m}${d}${hh}${mm}${ss}`
 }
+// 获取当前时间 字符串
+function getNowTimeStr() {
+  const dt = new Date()
+  return myTime(dt)
+}
 // 获取当前时间
 function getNowTime() {
   const dt = new Date()
-  return myTime(dt)
+  return dt
 }
 // 转换时间格式
 function dataFormat(dataStr) {
@@ -34,7 +39,7 @@ function getRandom() {
 }
 // 生成单个18位数
 function uuid() {
-  return `${getNowTime()}${getRandom()}`
+  return `${getNowTimeStr()}${getRandom()}`
 }
 // 生成多个18位数
 function moreUUID(n) {

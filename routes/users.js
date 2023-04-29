@@ -8,6 +8,8 @@ const usersHandle = require('../routes_handler/users')
 router.post('/test', usersHandle.test)
 // 查看所有用户
 router.post('/queryAll', usersHandle.allUser)
+// 模糊查询
+router.post('/getSearch', usersHandle.getSearch)
 // 分页
 router.post('/userList', usersHandle.userList)
 // 注册新用户

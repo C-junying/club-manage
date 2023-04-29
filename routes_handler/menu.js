@@ -3,15 +3,15 @@ require('express-async-errors')
 
 // 引入数据操作
 const menuDao = require('../dao/MenuDao')
-const { menuTree } = require('../utils/tree')
+const { menuOrderTree } = require('../utils/tree')
 const { uuid } = require('../utils/myStr')
 
-// 获取所有菜单
+// 获取所有菜单,树化
 exports.roleSelect = async (req, res) => {
   // 调用dao获取数据
   let ret = await menuDao.roleSelect()
   // 把数据树化
-  let tree = menuTree(ret)
+  let tree = menuOrderTree(ret)
   res.json({ code: 200, data: tree })
 }
 // 根据token角色获得菜单
@@ -19,22 +19,24 @@ exports.menuTokenList = async (req, res) => {
   // 调用dao获取数据
   let ret = await menuDao.queryByRoleId(req.auth.roleId)
   // 把数据树化
-  let tree = menuTree(ret)
+  let tree = menuOrderTree(ret)
   res.json({ code: 200, data: tree })
 }
-// 根据roleId角色获得菜单
-exports.roleIdMenuList = async (req, res) => {
+
+//根据roleId角色获得菜单
+exports.roleIdMenu = async (req, res) => {
   let role = req.body || req.params
   // 调用dao获取数据
-  let ret = await menuDao.queryByRoleId(role)
+  let ret = await menuDao.queryByRoleId(role.roleId)
   res.json({ code: 200, data: ret })
 }
-// 菜单列表
+
+// 分页菜单列表
 exports.getListByPage = async (req, res) => {
   let page = req.body || req.params
   // 调用dao获取数据
   let count = await menuDao.getCount()
-  let ret = await menuDao.getListByPage(page.pageNum, page.pageSize)
+  let ret = await menuDao.getListByPage(page)
   res.json({ code: 200, data: { count: count[0].count, list: ret } })
 }
 // 对菜单ID，菜单名称，菜单路径模糊查询
@@ -60,6 +62,7 @@ exports.updateMenu = async (req, res) => {
 // 删除菜单
 exports.deleteMenu = async (req, res) => {
   let menu = req.body || req.params
+  console.log(menu)
   let ret = await menuDao.deleteMenu(menu)
   res.json({ code: 200, data: ret, msg: '删除菜单成功' })
 }

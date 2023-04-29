@@ -79,7 +79,7 @@ const deleteRole = (role) => {
 // 分配角色权限
 const shareRolePower = (role) => {
   const temp = role.roleMenuIdArr.map((val) => {
-    return [role.roleId, val]
+    return [val, role.roleId]
   })
   const arr = [
     {
@@ -87,7 +87,7 @@ const shareRolePower = (role) => {
       params: [role.roleId],
     },
     {
-      sql: `insert into menu_role(role_id,menu_id) values ?`,
+      sql: `insert into menu_role(menu_id,role_id) values ?`,
       params: [temp],
     },
   ]

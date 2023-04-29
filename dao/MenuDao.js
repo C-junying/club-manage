@@ -52,8 +52,8 @@ const addMenu = (menu) => {
       ],
     },
     {
-      sql: 'insert into menu_role(roleId,menuId) values(?,?)',
-      params: ['202304191411040000', menu.menuId],
+      sql: 'insert into menu_role(menu_id,role_id) values(?,?)',
+      params: [menu.menuId, '202304191411040000'],
     },
   ]
   return BaseDao.execTransection(arr)

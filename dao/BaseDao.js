@@ -46,6 +46,7 @@ const execTransection = (sqlArr) => {
         }
         // 将所有需要执行的sql封装为数组
         promiseArr = sqlArr.map(({ sql, params }) => {
+          console.log(sql, params)
           return new Promise((resolve, reject) => {
             connection.query(sql, params, (e, rows, fields) => {
               e ? reject(e) : resolve({ rows, success: true })
