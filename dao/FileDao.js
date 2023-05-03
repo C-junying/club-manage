@@ -1,18 +1,8 @@
 const multer = require('multer')
 const fs = require('fs')
-//文件夹路径
-const fileUrl = './public/images/head'
+//头像文件夹路径
+// const fileUrl = './public/images/head'
 
-const storage = multer.diskStorage({
-  // 上传文件的目录
-  destination: function (req, file, cb) {
-    cb(null, fileUrl)
-  },
-  // 上传文件的名称
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  },
-})
 const createFolder = function (folder) {
   try {
     fs.accessSync(folder)
@@ -20,8 +10,24 @@ const createFolder = function (folder) {
     fs.mkdirSync(folder)
   }
 }
-// 创建文件夹
-createFolder(fileUrl)
-// multer配置
-const upload = multer({ storage })
-module.exports = upload
+function useStorage(fileURL) {
+  const storage = multer.diskStorage({
+    // 上传文件的目录
+    destination: function (req, file, cb) {
+      cb(null, fileURL)
+    },
+    // 上传文件的名称
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    },
+  })
+  // 创建文件夹
+  createFolder(fileURL)
+  return multer({ storage })
+}
+
+// 头像上传
+const uploadHead = useStorage('./public/images/head')
+// 社团类型图上传
+const uploadClubType = useStorage('./public/images/clubType')
+module.exports = { uploadHead, uploadClubType }

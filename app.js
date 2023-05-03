@@ -7,12 +7,21 @@ const { expressjwt } = require('express-jwt')
 const cors = require('cors')
 // 自定义模块
 var homeRouter = require('./routes/home')
+// 用户模块
 var usersRouter = require('./routes/users')
+// 菜单模块
 var menuRouter = require('./routes/menu')
+// 角色模块
 var roleRouter = require('./routes/roles')
+// 文件模块
 var fileRouter = require('./routes/file')
+// 活动模块
 var activityRouter = require('./routes/activity')
+// 社团模块
 var clubRouter = require('./routes/club')
+// 社团类型模块
+var clubTypeRouter = require('./routes/clubType')
+// 场地模块
 var areaRouter = require('./routes/area')
 
 var app = express()
@@ -43,6 +52,7 @@ app.use('/menu', menuRouter)
 app.use('/role', roleRouter)
 app.use('/images', fileRouter)
 app.use('/club', clubRouter)
+app.use('/club', clubTypeRouter)
 app.use('/activity', activityRouter)
 app.use('/area', areaRouter)
 
