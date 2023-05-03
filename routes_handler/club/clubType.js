@@ -2,9 +2,9 @@
 require('express-async-errors')
 
 // 引入数据操作
-const clubTypeDao = require('../dao/ClubTypeDao')
+const clubTypeDao = require('../../dao/club/ClubTypeDao')
 // 生成16位UUID
-const { uuid } = require('../utils/myStr')
+const { uuid } = require('../../utils/myStr')
 
 // 查询所有社团类型
 exports.clubTypeAll = async (req, res) => {

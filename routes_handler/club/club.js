@@ -2,6 +2,6 @@
 require('express-async-errors')
 
 // 引入数据操作
-const clubDao = require('../dao/ClubDao')
+const clubDao = require('../../dao/club/ClubDao')
 
 module.exports = {}

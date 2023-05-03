@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 
 // 导入路由处理函数
-const clubTypeHandle = require('../routes_handler/clubType')
+const clubTypeHandle = require('../../routes_handler/club/clubType')
 
 // 查询所有社团类型
 router.post('/clubTypeAll', clubTypeHandle.clubTypeAll)

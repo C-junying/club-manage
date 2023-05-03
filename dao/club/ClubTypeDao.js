@@ -1,4 +1,4 @@
-const BaseDao = require('./BaseDao')
+const BaseDao = require('../BaseDao')
 
 // 查询所有社团类型
 const clubTypeAll = () => {

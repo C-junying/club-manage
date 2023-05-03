@@ -2,6 +2,6 @@
 require('express-async-errors')
 
 // 引入数据操作
-const activityDao = require('../dao/ActivityDao')
+const activityDao = require('../../dao/activity/ActivityDao')
 
 module.exports = {}

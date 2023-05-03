@@ -16,11 +16,11 @@ var roleRouter = require('./routes/roles')
 // 文件模块
 var fileRouter = require('./routes/file')
 // 活动模块
-var activityRouter = require('./routes/activity')
+var activityRouter = require('./routes/activity/activity')
 // 社团模块
-var clubRouter = require('./routes/club')
+var clubRouter = require('./routes/club/club')
 // 社团类型模块
-var clubTypeRouter = require('./routes/clubType')
+var clubTypeRouter = require('./routes/club/clubType')
 // 场地模块
 var areaRouter = require('./routes/area')
 
