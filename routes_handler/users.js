@@ -1,7 +1,7 @@
 // 加密
 var bcryptc = require('bcryptjs')
 // token令牌
-var jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 // promise错误可以让app.js接收
 require('express-async-errors')
 
@@ -9,6 +9,8 @@ require('express-async-errors')
 const userDao = require('../dao/UserDao')
 // 生成16位UUID
 const { uuid, getNowTime } = require('../utils/myStr')
+// 把数据库格式转为驼峰
+const { toHump } = require('../utils/toHump')
 
 // 路由处理函数
 // 测试
@@ -20,6 +22,13 @@ exports.test = (req, res) => {
 exports.allUser = async (req, res) => {
   let ret = await userDao.queryAll()
   res.json({ code: 200, data: ret })
+}
+// 查看当前用户的信息
+exports.getUserId = async (req, res) => {
+  const user = req.body
+  let ret = await userDao.getUserId(user.userId)
+  console.log(ret)
+  res.json({ code: 200, data: ret[0] })
 }
 // 模糊查询
 exports.getSearch = async (req, res) => {
@@ -64,18 +73,18 @@ exports.login = async (req, res) => {
   if (ret.length === 0) {
     res.json({ code: 3002, msg: '该用户不存在' })
   } else {
+    const obj = toHump(ret[0])
     // bcrypt验证
-    if (bcryptc.compareSync(req.body.password, ret[0].password)) {
+    if (bcryptc.compareSync(req.body.password, obj.password)) {
       // 用户登录成功
       let token = jwt.sign(
         {
-          userId: ret[0].userId,
-          userName: ret[0].userName,
-          password: ret[0].password,
-          roleId: ret[0].roleId,
-          roleName: ret[0].roleName,
+          userId: obj.userId,
+          userName: obj.userName,
+          roleId: obj.roleId,
+          roleName: obj.roleName,
         },
-        'david', //秘钥
+        'junying', //秘钥
         { expiresIn: 3600 * 24 } //有效期
       )
       res.json({ code: 200, data: token, msg: '登录成功' })
@@ -94,8 +103,13 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
   let user = req.body || req.params
   console.log(user)
-  let ret = await userDao.updateUser(user)
-  res.json({ code: 200, data: ret, msg: '用户编辑成功' })
+  let check = await userDao.login(user)
+  if (check.length > 0 && check[0]['user_id'] !== user.userId) {
+    res.json({ code: '3007', msg: '该手机或邮箱已注册' })
+  } else {
+    let ret = await userDao.updateUser(user)
+    res.json({ code: 200, data: ret, msg: '用户编辑成功' })
+  }
 }
 // 修改密码
 exports.updatePassword = async (req, res) => {

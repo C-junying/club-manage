@@ -28,19 +28,12 @@ exports.search = async (req, res) => {
 exports.addRole = async (req, res) => {
   let role = req.body || req.params
   role.roleId = uuid()
-  role.roleMenuArr = role.roleMenuIdArr.map((val) => {
-    return [role.roleId, val]
-  })
   let ret = await roleDao.addRole(role)
   res.json({ code: 200, data: ret, role, msg: '添加角色成功' })
 }
 // 修改角色信息
 exports.updateRole = async (req, res) => {
   let role = req.body || req.params
-  role.roleMenuIdArr = Array.from(role.roleMenuIdArr)
-  role.roleMenuArr = role.roleMenuIdArr.map((val) => {
-    return [role.roleId, val]
-  })
   let ret = await roleDao.updateRole(role)
   res.json({ code: 200, data: ret, msg: '编辑角色成功' })
 }

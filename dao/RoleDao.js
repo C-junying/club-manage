@@ -24,39 +24,15 @@ const getSearch = (keywords) => {
 }
 // 添加角色
 const addRole = (role) => {
-  const arr = [
-    {
-      sql: 'insert into role(role_id,role_name,role_logo,remark) values(?,?,?,?)',
-      params: [role.id, role.roleName, role.logo, role.remark],
-    },
-  ]
-  if (role.roleMenuArr.length > 0) {
-    arr.push({
-      sql: `insert into menu_role(role_id,menu_id) values ?`,
-      params: [role.roleMenuArr],
-    })
-  }
-  return BaseDao.execTransection(arr)
+  const sql = 'insert into role(role_id,role_name,role_logo,remark) values(?,?,?,?)'
+  const params = [role.roleId, role.roleName, role.logo, role.remark]
+  return BaseDao.execute(sql, params)
 }
 // 修改角色信息
 const updateRole = (role) => {
-  const arr = [
-    {
-      sql: 'update role set role_name=?,role_logo=?,remark=? where role_id=?',
-      params: [role.roleName, role.logo, role.remark, role.roleId],
-    },
-    {
-      sql: 'delete from menu_role where role_id=?',
-      params: [role.roleId],
-    },
-  ]
-  if (role.roleMenuArr.length > 0) {
-    arr.push({
-      sql: `insert into menu_role(role_id,menu_id) values ?`,
-      params: [role.roleMenuArr],
-    })
-  }
-  return BaseDao.execTransection(arr)
+  const sql = 'update role set role_name=?,role_logo=?,remark=? where role_id=?'
+  const params = [role.roleName, role.logo, role.remark, role.roleId]
+  return BaseDao.execute(sql, params)
 }
 // 删除角色
 const deleteRole = (role) => {

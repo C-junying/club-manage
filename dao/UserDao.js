@@ -10,6 +10,12 @@ const getCount = () => {
   const sql = 'SELECT count(*) as count FROM user'
   return BaseDao.execute(sql)
 }
+// 查看当前用户的信息
+const getUserId = (userId) => {
+  const sql = 'SELECT * FROM user where user_id = ?'
+  const params = [userId]
+  return BaseDao.execute(sql, params)
+}
 // 分页查询
 const getListByPage = (pageNum, pageSize) => {
   const sql =
@@ -107,13 +113,14 @@ const updateUser = (user) => {
 }
 // 对用户模糊查询
 const getSearch = (keywords) => {
-  const sql = 'select * from user where CONCAT_WS(nickname,user_name,phone,email) REGEXP ?'
+  const sql = 'select * from user where CONCAT_WS("",nickname,user_name,phone,email) REGEXP ?'
   const params = [keywords]
   return BaseDao.execute(sql, params)
 }
 module.exports = {
   queryAll,
   getCount,
+  getUserId,
   getListByPage,
   login,
   register,
