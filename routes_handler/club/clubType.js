@@ -9,6 +9,7 @@ const { uuid } = require('../../utils/myStr')
 // 查询所有社团类型
 exports.clubTypeAll = async (req, res) => {
   let ret = await clubTypeDao.clubTypeAll()
+  ret.sort((a, b) => a['type_name'].localeCompare(b['type_name']))
   res.json({ code: 200, data: ret })
 }
 // 社团类型 模糊查询

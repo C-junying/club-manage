@@ -7,6 +7,9 @@ const areaHandle = require('../routes_handler/area')
 // 查询所有场地
 router.post('/areaAll', areaHandle.areaAll)
 
+// 查询所有场地
+router.post('/areaStatusAll', areaHandle.areaStatusAll)
+
 // 场地 模糊查询
 router.post('/areaSearch', areaHandle.areaSearch)
 

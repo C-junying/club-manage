@@ -29,5 +29,11 @@ function useStorage(fileURL) {
 // 头像上传
 const uploadHead = useStorage('./public/images/head')
 // 社团类型图上传
-const uploadClubType = useStorage('./public/images/clubType')
-module.exports = { uploadHead, uploadClubType }
+const uploadType = useStorage('./public/images/type')
+// 社团logo图上传
+const uploadClub = useStorage('./public/images/club')
+// 活动logo图上传
+const uploadActivity = useStorage('./public/images/activity')
+// 文本里的图上传
+const uploadText = useStorage('./public/images/text')
+module.exports = { uploadHead, uploadType, uploadText, uploadClub, uploadActivity }

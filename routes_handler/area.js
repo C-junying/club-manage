@@ -9,7 +9,15 @@ const { uuid, getNowTime } = require('../utils/myStr')
 // 查询所有场地
 exports.areaAll = async (req, res) => {
   let ret = await areaDao.areaAll()
+  ret.sort((a, b) => a['area_name'].localeCompare(b['area_name']))
   res.json({ code: 200, data: ret })
+}
+// 查询所有场地,除去被禁用的场地
+exports.areaStatusAll = async (req, res) => {
+  let ret = await areaDao.areaAll()
+  ret.sort((a, b) => a['area_name'].localeCompare(b['area_name']))
+  let areaList = ret.filter((item) => item.status !== 0)
+  res.json({ code: 200, data: areaList })
 }
 // 场地 模糊查询
 exports.areaSearch = async (req, res) => {
