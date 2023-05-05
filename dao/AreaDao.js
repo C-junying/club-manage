@@ -11,6 +11,12 @@ const areaSearch = (search) => {
   const params = [search]
   return BaseDao.execute(sql, params)
 }
+// 查看场地是否被使用
+const auditArea = (areaId) => {
+  const sql = 'select * from area where status!=1 and area_id=?'
+  const params = [areaId]
+  return BaseDao.execute(sql, params)
+}
 // 查看是否有重名
 const areaRepeatName = (name) => {
   const sql = 'select * from area where area_name = ?'
@@ -37,6 +43,16 @@ const updateArea = (area) => {
   ]
   return BaseDao.execTransection(arr)
 }
+// 占用场地
+const occupyArea = (status, areaId) => {
+  const arr = [
+    {
+      sql: 'update area set status=? where area_id=?',
+      params: [status, areaId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 // 删除场地
 const deleteArea = (areaId) => {
   const arr = [
@@ -48,4 +64,13 @@ const deleteArea = (areaId) => {
   return BaseDao.execTransection(arr)
 }
 
-module.exports = { areaAll, areaRepeatName, areaSearch, addArea, updateArea, deleteArea }
+module.exports = {
+  areaAll,
+  areaRepeatName,
+  auditArea,
+  areaSearch,
+  addArea,
+  updateArea,
+  occupyArea,
+  deleteArea,
+}

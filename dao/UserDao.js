@@ -32,6 +32,7 @@ const login = (user) => {
 }
 // 注册
 const register = (user) => {
+  console.log(user)
   if (user.roleId === undefined || user.roleId === '') {
     user.roleId = '202304191414070004'
   }
