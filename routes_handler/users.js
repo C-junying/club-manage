@@ -43,7 +43,6 @@ exports.userList = async (req, res) => {
   let page = req.body || req.params
   // 调用DAO获取数据
   let count = await userDao.getCount()
-  console.log('总数：', count[0].count)
   let ret = await userDao.getListByPage(page.pageNum, page.pageSize)
   // 封装返回数据
   res.json({ code: 200, data: { count: count[0].count, list: ret } })
@@ -102,7 +101,6 @@ exports.delete = async (req, res) => {
 // 编辑用户
 exports.update = async (req, res) => {
   let user = req.body || req.params
-  console.log(user)
   let check = await userDao.login(user)
   if (check.length > 0 && check[0]['user_id'] !== user.userId) {
     res.json({ code: '3007', msg: '该手机或邮箱已注册' })
@@ -114,7 +112,6 @@ exports.update = async (req, res) => {
 // 修改密码
 exports.updatePassword = async (req, res) => {
   let user = req.body || req.params
-  console.log(user)
   // 设置加密强度
   let salt = bcryptc.genSaltSync(10)
   // 用bcrypt加密

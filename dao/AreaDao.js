@@ -5,7 +5,7 @@ const areaAll = () => {
   const sql = 'SELECT * FROM area'
   return BaseDao.execute(sql)
 }
-// 查询所有场地
+// 查询所有场地  模糊查询
 const areaSearch = (search) => {
   const sql = 'select * from area where CONCAT_WS("",area_name,remark) REGEXP ?'
   const params = [search]

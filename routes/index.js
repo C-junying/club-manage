@@ -21,6 +21,8 @@ const clubRouter = require('./club/club')
 const clubTypeRouter = require('./club/clubType')
 // 场地模块
 const areaRouter = require('./area')
+// 老师模块
+const teacherRouter = require('./teacher')
 
 // 使用路由前缀地址
 router.use('/', homeRouter)
@@ -33,5 +35,6 @@ router.use('/club', clubTypeRouter)
 router.use('/activity', activityRouter)
 router.use('/activity', activityTypeRouter)
 router.use('/area', areaRouter)
+router.use('/teacher', teacherRouter)
 
 module.exports = router

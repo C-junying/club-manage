@@ -5,7 +5,7 @@ const clubTypeAll = () => {
   const sql = 'SELECT * FROM club_type'
   return BaseDao.execute(sql)
 }
-// 查询所有社团类型
+// 查询所有社团类型 模糊查询
 const clubTypeSearch = (search) => {
   const sql = 'select * from club_type where CONCAT_WS("",type_name,type_content) REGEXP ?'
   const params = [search]

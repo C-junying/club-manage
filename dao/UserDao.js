@@ -114,7 +114,8 @@ const updateUser = (user) => {
 }
 // 对用户模糊查询
 const getSearch = (keywords) => {
-  const sql = 'select * from user where CONCAT_WS("",nickname,user_name,phone,email) REGEXP ?'
+  const sql =
+    'SELECT DISTINCT u.*,r.* from user u LEFT JOIN play_role ur on u.user_id = ur.user_id LEFT JOIN role r on ur.role_id = r.role_id where CONCAT_WS("",nickname,user_name,phone,email) REGEXP ?'
   const params = [keywords]
   return BaseDao.execute(sql, params)
 }

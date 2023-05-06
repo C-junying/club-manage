@@ -29,7 +29,7 @@ exports.addRole = async (req, res) => {
   let role = req.body || req.params
   role.roleId = uuid()
   let ret = await roleDao.addRole(role)
-  res.json({ code: 200, data: ret, role, msg: '添加角色成功' })
+  res.json({ code: 200, data: ret, msg: '添加角色成功' })
 }
 // 修改角色信息
 exports.updateRole = async (req, res) => {

@@ -5,7 +5,7 @@ const activityTypeAll = () => {
   const sql = 'SELECT * FROM activity_type'
   return BaseDao.execute(sql)
 }
-// 查询所有活动类型
+// 查询所有活动类型  模糊查询
 const activityTypeSearch = (search) => {
   const sql = 'select * from activity_type where CONCAT_WS("",type_name,type_content) REGEXP ?'
   const params = [search]
