@@ -12,6 +12,8 @@ router.post('/searchApplyClub', clubHandle.searchApplyClub)
 router.post('/userApplyClubAll', clubHandle.userApplyClubAll)
 // 查看apply_id的申请社团记录
 router.post('/applyIdApplyClub', clubHandle.applyIdApplyClub)
+// 查看club_id的社团所有信息
+router.post('/clubIdApplyClub', clubHandle.clubIdApplyClub)
 // 提交申请社团记录
 router.post('/addApplyClub', clubHandle.addApplyClub)
 // 审核申请社团
@@ -22,5 +24,12 @@ router.post('/releaseClub', clubHandle.releaseClub)
 router.post('/deleteApplyClub', clubHandle.deleteApplyClub)
 // 查询用户的社团
 router.post('/getUserClubs', clubHandle.getUserClubs)
-
+// 查看club_id的社团信息
+router.post('/clubIdClub', clubHandle.clubIdClub)
+// 查看社团有哪些社团成员
+router.post('/getClubMember', clubHandle.getClubMember)
+// 查看社团有哪些社团成员 模糊
+router.post('/searchClubMember', clubHandle.searchClubMember)
+// 根据clubId和userId查看当前用户在社团担任什么职位
+router.post('/clubIdUserIdToBearName', clubHandle.clubIdUserIdToBearName)
 module.exports = router

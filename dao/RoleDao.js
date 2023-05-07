@@ -24,14 +24,14 @@ const getSearch = (keywords) => {
 }
 // 添加角色
 const addRole = (role) => {
-  const sql = 'insert into role(role_id,role_name,role_logo,remark) values(?,?,?,?)'
-  const params = [role.roleId, role.roleName, role.logo, role.remark]
+  const sql = 'insert into role(role_id,role_name,role_logo,`rank`,remark) values(?,?,?,?,?)'
+  const params = [role.roleId, role.roleName, role.logo, role.rank, role.remark]
   return BaseDao.execute(sql, params)
 }
 // 修改角色信息
 const updateRole = (role) => {
-  const sql = 'update role set role_name=?,role_logo=?,remark=? where role_id=?'
-  const params = [role.roleName, role.logo, role.remark, role.roleId]
+  const sql = 'update role set role_name=?,role_logo=?,`rank`=?,remark=? where role_id=?'
+  const params = [role.roleName, role.logo, role.rank, role.remark, role.roleId]
   return BaseDao.execute(sql, params)
 }
 // 删除角色

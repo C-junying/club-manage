@@ -8,6 +8,7 @@ const { uuid } = require('../utils/myStr')
 // 查询所有角色
 exports.roleList = async (req, res) => {
   let ret = await roleDao.roleList()
+  ret.sort((a, b) => a.rank - b.rank)
   res.json({ code: 200, data: ret })
 }
 // 角色列表,分页
@@ -22,6 +23,7 @@ exports.getListByPage = async (req, res) => {
 exports.search = async (req, res) => {
   let keywords = req.body || req.params
   let ret = await roleDao.getSearch(keywords)
+  ret.sort((a, b) => a.rank - b.rank)
   res.json({ code: 200, data: ret })
 }
 // 添加角色

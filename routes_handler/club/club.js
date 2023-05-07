@@ -5,6 +5,8 @@ require('express-async-errors')
 const clubDao = require('../../dao/club/ClubDao')
 const areaDao = require('../../dao/AreaDao')
 const memberDao = require('../../dao/club/ClubMemberDao')
+const teacherDao = require('../../dao/TeacherDao')
+
 // 生成16位UUID
 const { uuid, getNowTime } = require('../../utils/myStr')
 
@@ -33,6 +35,13 @@ exports.applyIdApplyClub = async (req, res) => {
   let ret = await clubDao.applyIdApplyClub(apply.applyId)
   res.json({ code: 200, data: ret })
 }
+
+// 查看club_id的社团所有信息
+exports.clubIdApplyClub = async (req, res) => {
+  let club = req.body || req.params
+  let ret = await clubDao.clubIdApplyClub(club.clubId)
+  res.json({ code: 200, data: ret })
+}
 // 提交申请社团记录
 exports.addApplyClub = async (req, res) => {
   // 获取数据
@@ -41,7 +50,7 @@ exports.addApplyClub = async (req, res) => {
   clubApply.applyInfo.applyId = uuid()
   clubApply.applyInfo.applyTime = getNowTime()
   clubApply.clubInfor.clubId = uuid()
-  clubApply.clubInfor.position = '指导老师'
+  clubApply.clubInfor.bearName = '指导老师'
   // 判断场地是否可以用
   let flag = await areaDao.auditArea(clubApply.applyInfo.areaId)
   if (flag.length > 0) {
@@ -62,18 +71,17 @@ exports.auditApplyClub = async (req, res) => {
   apply.replyTime = getNowTime()
   let ret = await clubDao.auditApplyClub(apply)
   if (apply.applyState === 1) {
-    const member = {
+    await memberDao.addMember({
       userId: apply.userId,
       clubId: apply.clubId,
-      position: '社长',
+      bearName: '社长',
       contribute: '',
       joinTime: apply.replyTime,
-    }
-    await memberDao.addMember(member)
+    })
     res.json({ code: 200, data: ret, msg: '审核成功' })
   } else {
     await areaDao.occupyArea(1, apply.areaId)
-    res.json({ code: 200, data: ret, msg: '驳回成功' })
+    res.json({ code: 3200, data: ret, msg: '驳回成功' })
   }
 }
 // 发布社团
@@ -88,7 +96,7 @@ exports.deleteApplyClub = async (req, res) => {
   // 撤销占用场地
   await areaDao.occupyArea(1, apply.areaId)
   // 撤销申请社团
-  await clubDao.deleteApplyClub(apply.applyId)
+  await clubDao.deleteApplyClub(apply.applyId, apply.clubId)
   res.json({ code: 200, msg: '撤销成功' })
 }
 
@@ -96,4 +104,31 @@ exports.deleteApplyClub = async (req, res) => {
 exports.getUserClubs = async (req, res) => {
   let ret = await clubDao.getUserClubs(req.auth.userId)
   res.json({ code: 200, data: ret })
+}
+// 查看club_id的社团信息
+exports.clubIdClub = async (req, res) => {
+  let club = req.body || req.params
+  let ret = await clubDao.clubIdClub(club.clubId)
+  res.json({ code: 200, data: ret })
+}
+// 查看社团有哪些社团成员
+exports.getClubMember = async (req, res) => {
+  let club = req.body || req.params
+  let member = await clubDao.getClubMember(club.clubId)
+  let teacher = await teacherDao.clubIdTeacher(club.clubId)
+  res.json({ code: 200, data: [...teacher, ...member] })
+}
+// 查看社团有哪些社团成员 模糊
+exports.searchClubMember = async (req, res) => {
+  let club = req.body || req.params
+  let member = await clubDao.searchClubMember(club.clubId, club.keywords)
+  let teacher = await teacherDao.searchClubIdTeacher(club.clubId, club.keywords)
+  res.json({ code: 200, data: [...teacher, ...member] })
+}
+// 根据clubId和userId查看当前用户在社团担任什么职位
+exports.clubIdUserIdToBearName = async (req, res) => {
+  let club = req.body || req.params
+  let member = await clubDao.memberClubIdUserIdToBearName(club.clubId, req.auth.userId)
+  let taecher = await clubDao.teacherClubIdUserIdToBearName(club.clubId, req.auth.userId)
+  res.json({ code: 200, data: { member, taecher } })
 }

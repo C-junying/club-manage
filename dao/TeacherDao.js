@@ -16,22 +16,40 @@ const teacherSearch = (search) => {
 // 通过clubId查询
 const clubIdTeacher = (clubId) => {
   const sql =
-    'SELECT bear.*,teacher.*,password,user_name,sex,phone FROM bear left join teacher on bear.teacher_id=teacher.teacher_id \
+    'SELECT bear.*,teacher.*,user.* FROM bear left join teacher on bear.teacher_id=teacher.teacher_id \
     left join user on teacher.user_id=user.user_id where bear_id=?'
   const params = [clubId]
+  return BaseDao.execute(sql, params)
+}
+// 通过clubId查询 模糊
+const searchClubIdTeacher = (clubId, keywords) => {
+  const sql =
+    'SELECT bear.*,teacher.*,user.* FROM bear left join teacher on bear.teacher_id=teacher.teacher_id \
+    left join user on teacher.user_id=user.user_id where bear_id=? and CONCAT_WS("",user_name,phone) REGEXP ?'
+  const params = [clubId, keywords]
+  return BaseDao.execute(sql, params)
+}
+// 查社团是否有某个老师
+const clubIdTeacherPhone = (clubId, phone) => {
+  const sql =
+    'SELECT bear.*,teacher.*,user.* FROM bear left join teacher on bear.teacher_id=teacher.teacher_id \
+    left join user on teacher.user_id=user.user_id where bear_id=? and phone=?'
+  const params = [clubId, phone]
   return BaseDao.execute(sql, params)
 }
 // 添加老师
 const addteacher = (teacher) => {
   const arr = [
     {
-      sql: 'insert into user(user_id,password,user_name,sex,phone, regist_time) values(?,?,?,?,?,?)',
+      sql: 'insert into user(user_id,password,nickname,user_name,sex,phone,picture, regist_time) values(?,?,?,?,?,?,?,?)',
       params: [
         teacher.userId,
         teacher.password,
         teacher.userName,
+        teacher.userName,
         teacher.sex,
         teacher.phone,
+        teacher.picture,
         teacher.createTime,
       ],
     },
@@ -84,6 +102,8 @@ module.exports = {
   teacherAll,
   teacherSearch,
   clubIdTeacher,
+  searchClubIdTeacher,
+  clubIdTeacherPhone,
   addteacher,
   updateteacher,
   deleteteacher,

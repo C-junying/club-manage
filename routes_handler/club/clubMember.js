@@ -4,6 +4,8 @@ require('express-async-errors')
 // 引入数据操作
 const memberDao = require('../../dao/club/ClubMemberDao')
 const { getNowTime } = require('../../utils/myStr')
+const { checkPhoneName, login } = require('../../dao/UserDao')
+const { clubIdTeacherPhone } = require('../../dao/TeacherDao')
 
 // 查询某个社团的所有成员
 exports.clubIdAllMember = async (req, res) => {
@@ -15,8 +17,25 @@ exports.clubIdAllMember = async (req, res) => {
 exports.addMember = async (req, res) => {
   let member = req.body || req.params
   member.joinTime = getNowTime()
-  let ret = await memberDao.addMember(member)
-  res.json({ code: 200, data: ret, msg: '添加成功' })
+  // 检测是否有这个人
+  const check = await checkPhoneName(member.userName, member.phone)
+  if (check.length > 0) {
+    // 检查成员
+    const checkMember = await memberDao.clubIdMember(member.clubId, member.phone)
+    // 检查老师
+    const checkTeacher = await clubIdTeacherPhone(member.clubId, member.phone)
+    if (checkMember.length === 0 && checkTeacher.length === 0) {
+      let user = await login({ phone: member.phone })
+      member.userId = user[0]['user_id']
+      member.bearName = '成员'
+      let ret = await memberDao.addMember(member)
+      res.json({ code: 200, data: ret, msg: '添加成功' })
+    } else if (checkMember.length > 0 || checkTeacher.length > 0) {
+      res.json({ code: 3200, msg: '社团已经拥有该成员' })
+    }
+  } else {
+    res.json({ code: 3200, msg: '不存在该用户' })
+  }
 }
 // 删除社团成员
 exports.deleteMember = async (req, res) => {

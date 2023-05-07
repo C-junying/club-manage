@@ -34,7 +34,7 @@ const login = (user) => {
 const register = (user) => {
   console.log(user)
   if (user.roleId === undefined || user.roleId === '') {
-    user.roleId = '202304191414070004'
+    user.roleId = '202304191413520003'
   }
   const arr = [
     {
@@ -119,6 +119,12 @@ const getSearch = (keywords) => {
   const params = [keywords]
   return BaseDao.execute(sql, params)
 }
+// 验证姓名与手机号
+const checkPhoneName = (userName, phone) => {
+  const sql = 'select * from user where user_name=? and phone=?'
+  const params = [userName, phone]
+  return BaseDao.execute(sql, params)
+}
 module.exports = {
   queryAll,
   getCount,
@@ -130,4 +136,5 @@ module.exports = {
   updatePassword,
   updateUser,
   getSearch,
+  checkPhoneName,
 }

@@ -29,6 +29,7 @@ exports.addteacher = async (req, res) => {
   teacher.userId = uuid()
   teacher.roleId = '202304191414130005'
   teacher.teacherId = uuid()
+  teacher.picture = 'http://localhost:8080/images/head/1.jpg'
   teacher.createTime = getNowTime()
   // 设置加密强度
   let salt = bcryptc.genSaltSync(10)
