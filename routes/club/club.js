@@ -38,4 +38,7 @@ router.post('/getClubMember', clubHandle.getClubMember)
 router.post('/searchClubMember', clubHandle.searchClubMember)
 // 根据clubId和userId查看当前用户在社团担任什么职位
 router.post('/clubIdUserIdToBearName', clubHandle.clubIdUserIdToBearName)
+// 解散社团
+router.post('/clubDisband', clubHandle.clubDisband)
+
 module.exports = router

@@ -182,6 +182,16 @@ const teacherClubIdUserIdToBearName = (clubId, userId) => {
   const params = [clubId, userId]
   return BaseDao.execute(sql, params)
 }
+// 解散社团
+const clubDisband = (clubId) => {
+  const arr = [
+    {
+      sql: 'update club set state=? where club_id=?',
+      params: [2, clubId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 module.exports = {
   applyClubAll,
   searchApplyClub,
@@ -201,4 +211,5 @@ module.exports = {
   getClubMember,
   memberClubIdUserIdToBearName,
   teacherClubIdUserIdToBearName,
+  clubDisband,
 }

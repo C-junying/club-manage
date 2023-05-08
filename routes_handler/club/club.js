@@ -151,3 +151,9 @@ exports.clubIdUserIdToBearName = async (req, res) => {
   let taecher = await clubDao.teacherClubIdUserIdToBearName(club.clubId, req.auth.userId)
   res.json({ code: 200, data: { member, taecher } })
 }
+// 解散社团
+exports.clubDisband = async (req, res) => {
+  let club = req.body || req.params
+  let ret = await clubDao.clubDisband(club.clubId)
+  res.json({ code: 200, data: ret, msg: '解散成功' })
+}
