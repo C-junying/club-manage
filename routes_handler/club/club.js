@@ -99,10 +99,23 @@ exports.deleteApplyClub = async (req, res) => {
   await clubDao.deleteApplyClub(apply.applyId, apply.clubId)
   res.json({ code: 200, msg: '撤销成功' })
 }
-
+// 查询所有社团
+exports.getClubsAll = async (req, res) => {
+  let ret = await clubDao.getClubsAll()
+  ret = ret.filter((item) => item.state === 1)
+  res.json({ code: 200, data: ret })
+}
+// 查询所有社团 模糊查询
+exports.searchClubsAll = async (req, res) => {
+  let { keywords } = req.body || req.params
+  let ret = await clubDao.searchClubsAll(keywords)
+  ret = ret.filter((item) => item.state === 1)
+  res.json({ code: 200, data: ret })
+}
 // 查询用户的社团
 exports.getUserClubs = async (req, res) => {
   let ret = await clubDao.getUserClubs(req.auth.userId)
+  ret = ret.filter((item) => item.state === 1)
   res.json({ code: 200, data: ret })
 }
 // 查看club_id的社团信息
@@ -110,6 +123,12 @@ exports.clubIdClub = async (req, res) => {
   let club = req.body || req.params
   let ret = await clubDao.clubIdClub(club.clubId)
   res.json({ code: 200, data: ret })
+}
+// 更新社团
+exports.updateClubInfo = async (req, res) => {
+  let club = req.body || req.params
+  let ret = await clubDao.updateClubInfo(club)
+  res.json({ code: 200, data: ret, msg: '更新成功' })
 }
 // 查看社团有哪些社团成员
 exports.getClubMember = async (req, res) => {

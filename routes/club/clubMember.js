@@ -7,6 +7,8 @@ const memberHandle = require('../../routes_handler/club/clubMember')
 router.post('/clubIdAllMember', memberHandle.clubIdAllMember)
 // 添加社团成员
 router.post('/addMember', memberHandle.addMember)
+// 更新成员职位
+router.post('/updateMemberBear', memberHandle.updateMemberBear)
 // 删除社团成员
 router.post('/deleteMember', memberHandle.deleteMember)
 

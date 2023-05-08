@@ -8,7 +8,7 @@ const usersHandle = require('../routes_handler/users')
 router.post('/test', usersHandle.test)
 // 查看所有用户
 router.post('/queryAll', usersHandle.allUser)
-// 查看当前用户信息
+// 查看某个用户的信息
 router.post('/getUserId', usersHandle.getUserId)
 // 模糊查询
 router.post('/getSearch', usersHandle.getSearch)

@@ -21,6 +21,8 @@ const clubRouter = require('./club/club')
 const clubTypeRouter = require('./club/clubType')
 // 社团成员
 const clubMemberRouter = require('./club/clubMember')
+// 社团学期报告
+const clubReportRouter = require('./club/clubReport')
 // 场地模块
 const areaRouter = require('./area')
 // 老师模块
@@ -35,6 +37,7 @@ router.use('/images', fileRouter)
 router.use('/club', clubRouter)
 router.use('/club', clubTypeRouter)
 router.use('/club', clubMemberRouter)
+router.use('/club', clubReportRouter)
 router.use('/activity', activityRouter)
 router.use('/activity', activityTypeRouter)
 router.use('/area', areaRouter)

@@ -10,7 +10,7 @@ const getCount = () => {
   const sql = 'SELECT count(*) as count FROM user'
   return BaseDao.execute(sql)
 }
-// 查看当前用户的信息
+// 查看某个用户的信息
 const getUserId = (userId) => {
   const sql = 'SELECT * FROM user where user_id = ?'
   const params = [userId]
@@ -32,7 +32,6 @@ const login = (user) => {
 }
 // 注册
 const register = (user) => {
-  console.log(user)
   if (user.roleId === undefined || user.roleId === '') {
     user.roleId = '202304191413520003'
   }

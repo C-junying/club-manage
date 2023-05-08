@@ -22,10 +22,16 @@ router.post('/auditApplyClub', clubHandle.auditApplyClub)
 router.post('/releaseClub', clubHandle.releaseClub)
 // 删除申请社团记录
 router.post('/deleteApplyClub', clubHandle.deleteApplyClub)
+// 查询所有社团
+router.post('/getClubsAll', clubHandle.getClubsAll)
+// 查询所有社团 模糊查询
+router.post('/searchClubsAll', clubHandle.searchClubsAll)
 // 查询用户的社团
 router.post('/getUserClubs', clubHandle.getUserClubs)
 // 查看club_id的社团信息
 router.post('/clubIdClub', clubHandle.clubIdClub)
+// 更新社团
+router.post('/updateClubInfo', clubHandle.updateClubInfo)
 // 查看社团有哪些社团成员
 router.post('/getClubMember', clubHandle.getClubMember)
 // 查看社团有哪些社团成员 模糊

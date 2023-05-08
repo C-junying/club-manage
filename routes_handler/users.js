@@ -23,7 +23,7 @@ exports.allUser = async (req, res) => {
   let ret = await userDao.queryAll()
   res.json({ code: 200, data: ret })
 }
-// 查看当前用户的信息
+// 查看某个用户的信息
 exports.getUserId = async (req, res) => {
   const user = req.body
   let ret = await userDao.getUserId(user.userId)

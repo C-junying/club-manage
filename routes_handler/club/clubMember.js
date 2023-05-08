@@ -27,7 +27,6 @@ exports.addMember = async (req, res) => {
     if (checkMember.length === 0 && checkTeacher.length === 0) {
       let user = await login({ phone: member.phone })
       member.userId = user[0]['user_id']
-      member.bearName = '成员'
       let ret = await memberDao.addMember(member)
       res.json({ code: 200, data: ret, msg: '添加成功' })
     } else if (checkMember.length > 0 || checkTeacher.length > 0) {
@@ -36,6 +35,12 @@ exports.addMember = async (req, res) => {
   } else {
     res.json({ code: 3200, msg: '不存在该用户' })
   }
+}
+// 更新成员职位
+exports.updateMemberBear = async (req, res) => {
+  let member = req.body || req.params
+  let ret = await memberDao.updateMemberBear(member)
+  res.json({ code: 200, data: ret, msg: '更改成功' })
 }
 // 删除社团成员
 exports.deleteMember = async (req, res) => {

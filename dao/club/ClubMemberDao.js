@@ -25,7 +25,16 @@ const addMember = (member) => {
   ]
   return BaseDao.execTransection(arr)
 }
-
+// 更新成员职位
+const updateMemberBear = (member) => {
+  const arr = [
+    {
+      sql: 'update club_member set bear_name=? where user_id=? and club_id=?',
+      params: [member.bearName, member.userId, member.clubId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 // 删除社团成员
 const deleteMember = (userId, clubId) => {
   const arr = [
@@ -41,5 +50,6 @@ module.exports = {
   clubIdAllMember,
   clubIdMember,
   addMember,
+  updateMemberBear,
   deleteMember,
 }

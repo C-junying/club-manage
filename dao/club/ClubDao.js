@@ -115,6 +115,22 @@ const deleteApplyClub = (applyId, clubId) => {
   ]
   return BaseDao.execTransection(arr)
 }
+// 查询所有社团
+const getClubsAll = () => {
+  const sql =
+    'select area_name,reply_time,club.*,type_name,user_name from club left join club_type on club.type_id=club_type.type_id\
+     left join apply on club.apply_id=apply.apply_id left join area on apply.area_id=area.area_id left join user on club.user_id=user.user_id'
+  return BaseDao.execute(sql)
+}
+// 查询所有社团 模糊查询
+const searchClubsAll = (keywords) => {
+  const sql =
+    'select area_name,reply_time,club.*,type_name,user_name from club left join club_type on club.type_id=club_type.type_id\
+     left join apply on club.apply_id=apply.apply_id left join area on apply.area_id=area.area_id \
+     left join user on club.user_id=user.user_id where CONCAT_WS("",club_name,user_name,type_name) REGEXP ?'
+  const params = [keywords]
+  return BaseDao.execute(sql, params)
+}
 // 查询用户的社团
 const getUserClubs = (userId) => {
   const sql =
@@ -128,6 +144,16 @@ const clubIdClub = (clubId) => {
   const sql = 'select * from club where club.club_id = ?'
   const params = [clubId]
   return BaseDao.execute(sql, params)
+}
+// 更新社团
+const updateClubInfo = (club) => {
+  const arr = [
+    {
+      sql: 'update club set type_id=?,picture=?,club_intro=?,club_content=? where club_id=?',
+      params: [club.typeId, club.picture, club.clubIntro, club.clubContent, club.clubId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
 }
 // 查看社团有哪些社团成员
 const getClubMember = (clubId) => {
@@ -167,6 +193,9 @@ module.exports = {
   auditApplyClub,
   releaseClub,
   deleteApplyClub,
+  getClubsAll,
+  searchClubsAll,
+  updateClubInfo,
   getUserClubs,
   searchClubMember,
   getClubMember,
