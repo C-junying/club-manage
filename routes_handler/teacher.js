@@ -27,7 +27,7 @@ exports.clubIdTeacher = async (req, res) => {
 exports.addteacher = async (req, res) => {
   let teacher = req.body || req.params
   teacher.userId = uuid()
-  teacher.roleId = '202304191414130005'
+  teacher.roleId = '202304191413520003'
   teacher.teacherId = uuid()
   teacher.picture = 'http://localhost:8080/images/head/1.jpg'
   teacher.createTime = getNowTime()

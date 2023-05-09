@@ -15,6 +15,8 @@ const fileRouter = require('./file')
 const activityRouter = require('./activity/activity')
 // 活动类型模块
 const activityTypeRouter = require('./activity/activityType')
+// 活动成员
+const activityMemberRouter = require('./activity/activityMember')
 // 社团模块
 const clubRouter = require('./club/club')
 // 社团类型模块
@@ -27,6 +29,8 @@ const clubReportRouter = require('./club/clubReport')
 const areaRouter = require('./area')
 // 老师模块
 const teacherRouter = require('./teacher')
+// 费用模块
+const costRouter = require('./cost')
 
 // 使用路由前缀地址
 router.use('/', homeRouter)
@@ -40,7 +44,9 @@ router.use('/club', clubMemberRouter)
 router.use('/club', clubReportRouter)
 router.use('/activity', activityRouter)
 router.use('/activity', activityTypeRouter)
+router.use('/activity', activityMemberRouter)
 router.use('/area', areaRouter)
 router.use('/teacher', teacherRouter)
+router.use('/cost', costRouter)
 
 module.exports = router

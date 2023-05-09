@@ -3,14 +3,14 @@ const BaseDao = require('../BaseDao')
 // 查看所有申请社团记录
 const applyClubAll = () => {
   const sql =
-    'select apply.*,club_id,club.user_id,user_name,phone,state from apply left join club on apply.apply_id = club.apply_id \
+    'select apply.*,club_id,club.user_id,user_name,phone,state from club left join apply on club.apply_id=apply.apply_id \
     left join user on apply.apply_user = user.user_id'
   return BaseDao.execute(sql)
 }
 // 审核列表模糊查询
 const searchApplyClub = (keywords) => {
   const sql =
-    'select apply.*,club_id,club.user_id,user_name,phone,state from apply left join club on apply.apply_id = club.apply_id \
+    'select apply.*,club_id,club.user_id,user_name,phone,state from club left join apply on club.apply_id=apply.apply_id \
     left join user on apply.apply_user = user.user_id\
     where CONCAT_WS("",apply.name,user_name,phone) REGEXP ?'
   const params = [keywords]
@@ -182,6 +182,7 @@ const teacherClubIdUserIdToBearName = (clubId, userId) => {
   const params = [clubId, userId]
   return BaseDao.execute(sql, params)
 }
+
 // 解散社团
 const clubDisband = (clubId) => {
   const arr = [
