@@ -8,7 +8,7 @@ const activityIdAllMember = (activityId) => {
   return BaseDao.execute(sql, params)
 }
 // 查询某个活动的所有成员 模糊查询
-const searchClubMember = (activityId, keywords) => {
+const searchActivityMember = (activityId, keywords) => {
   const sql =
     'select user.*,activity_member.* from activity_member left join user on activity_member.user_id=user.user_id \
   where activity_id=? and CONCAT_WS("",user_name,phone) REGEXP ?'
@@ -56,7 +56,7 @@ const deleteMember = (userId, activityId) => {
 
 module.exports = {
   activityIdAllMember,
-  searchClubMember,
+  searchActivityMember,
   activityIdMember,
   addMember,
   updateMemberBear,

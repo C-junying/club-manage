@@ -31,10 +31,30 @@ router.post('/searchActivity', activityHandle.searchActivity)
 
 // 全校活动
 router.post('/getActivityAll', activityHandle.getActivityAll)
-// 查看activityId的社团信息
-router.post('/activityIdClub', activityHandle.activityIdClub)
+// 查看activityId的活动信息
+router.post('/activityIdInfo', activityHandle.activityIdInfo)
 // 社团活动
 router.post('/getClubActivityAll', activityHandle.getClubActivityAll)
 // 根据activityId和userId查看当前用户在社团担任什么职位
 router.post('/activityIdUserIdToBearName', activityHandle.activityIdUserIdToBearName)
+
+// 查看活动有哪些活动成员
+router.post('/getActivityMember', activityHandle.getActivityMember)
+// 查看活动有哪些活动成员 模糊
+router.post('/searchActivityMember', activityHandle.searchActivityMember)
+
+// 查某个活动的所有活动阶段
+router.post('/getActivityStage', activityHandle.getActivityStage)
+// 查活动阶段信息
+router.post('/getStageInfo', activityHandle.getStageInfo)
+// 添加活动阶段
+router.post('/addActivityStage', activityHandle.addActivityStage)
+// 删除活动阶段
+router.post('/deleteActivityStage', activityHandle.deleteActivityStage)
+// 提交活动总结
+router.post('/addactivityReport', activityHandle.addactivityReport)
+
+// 撤回活动总结
+router.post('/alteractivityReport', activityHandle.alteractivityReport)
+
 module.exports = router

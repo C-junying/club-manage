@@ -165,10 +165,10 @@ exports.getActivityAll = async (req, res) => {
   ret.sort((a, b) => b['apply_time'] - a['apply_time'])
   res.json({ code: 200, data: ret })
 }
-// 查看activityId的社团信息
-exports.activityIdClub = async (req, res) => {
+// 查看activityId的活动信息
+exports.activityIdInfo = async (req, res) => {
   let activity = req.body || req.params
-  let ret = await activityDao.activityIdClub(activity.activityId)
+  let ret = await activityDao.activityIdInfo(activity.activityId)
   res.json({ code: 200, data: ret })
 }
 // 社团活动
@@ -184,4 +184,56 @@ exports.activityIdUserIdToBearName = async (req, res) => {
   let member = await activityDao.memberActivityIdUserIdToBearName(activity.activityId, req.auth.userId)
   let taecher = await activityDao.teacherActivityIdUserIdToBearName(activity.activityId, req.auth.userId)
   res.json({ code: 200, data: { member, taecher } })
+}
+// 查看活动有哪些活动成员
+exports.getActivityMember = async (req, res) => {
+  let activity = req.body || req.params
+  let member = await memberDao.activityIdAllMember(activity.activityId)
+  let teacher = await teacherDao.clubIdTeacher(activity.activityId)
+  res.json({ code: 200, data: [...teacher, ...member] })
+}
+// 查看活动有哪些活动成员 模糊
+exports.searchActivityMember = async (req, res) => {
+  let activity = req.body || req.params
+  let member = await memberDao.searchActivityMember(activity.activityId, activity.keywords)
+  let teacher = await teacherDao.searchClubIdTeacher(activity.activityId, activity.keywords)
+  res.json({ code: 200, data: [...teacher, ...member] })
+}
+// 查某个活动的所有活动阶段
+exports.getActivityStage = async (req, res) => {
+  let activity = req.body || req.params
+  let ret = await activityDao.getActivityStage(activity.activityId)
+  ret.sort((a, b) => a['start_time'] - b['start_time'])
+  res.json({ code: 200, data: ret })
+}
+// 查活动阶段信息
+exports.getStageInfo = async (req, res) => {
+  let stage = req.body || req.params
+  let ret = await activityDao.getStageInfo(stage.stageId)
+  res.json({ code: 200, data: ret })
+}
+// 添加活动阶段
+exports.addActivityStage = async (req, res) => {
+  let activity = req.body || req.params
+  activity.stageId = uuid()
+  let ret = await activityDao.addActivityStage(activity)
+  res.json({ code: 200, data: ret, msg: '添加成功' })
+}
+// 删除活动阶段
+exports.deleteActivityStage = async (req, res) => {
+  let activity = req.body || req.params
+  let ret = await activityDao.deleteActivityStage(activity)
+  res.json({ code: 200, data: ret, msg: '删除成功' })
+}
+// 提交活动总结
+exports.addactivityReport = async (req, res) => {
+  let activity = req.body || req.params
+  let ret = await activityDao.addactivityReport(activity)
+  res.json({ code: 200, data: ret, msg: '提交成功' })
+}
+// 撤回活动总结
+exports.alteractivityReport = async (req, res) => {
+  let activity = req.body || req.params
+  let ret = await activityDao.alteractivityReport(activity)
+  res.json({ code: 200, data: ret, msg: '撤回成功' })
 }

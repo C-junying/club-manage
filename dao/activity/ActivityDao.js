@@ -153,10 +153,10 @@ const getClubActivityAll = (clubId) => {
   const params = [clubId]
   return BaseDao.execute(sql, params)
 }
-// 查看activityId的社团信息
-const activityIdClub = (clubId) => {
+// 查看activityId的活动信息
+const activityIdInfo = (activityId) => {
   const sql = 'select * from activity where activity_id = ?'
-  const params = [clubId]
+  const params = [activityId]
   return BaseDao.execute(sql, params)
 }
 // 根据activityId和userId查看当前用户在社团担任什么职位 成员
@@ -172,7 +172,65 @@ const teacherActivityIdUserIdToBearName = (activityId, userId) => {
   const params = [activityId, userId]
   return BaseDao.execute(sql, params)
 }
-
+// 查某个活动的所有活动阶段
+const getActivityStage = (activityId) => {
+  const sql = 'select * from activity_stage where activity_id=?'
+  const params = [activityId]
+  return BaseDao.execute(sql, params)
+}
+// 查活动阶段信息
+const getStageInfo = (stageId) => {
+  const sql = 'select * from activity_stage where stage_id=?'
+  const params = [stageId]
+  return BaseDao.execute(sql, params)
+}
+// 添加活动阶段
+const addActivityStage = (activity) => {
+  const arr = [
+    {
+      sql: 'insert into activity_stage(stage_id,activity_id,stage_name,stage_content,start_time,end_time) values(?,?,?,?,?,?)',
+      params: [
+        activity.stageId,
+        activity.activityId,
+        activity.stageName,
+        activity.stageContent,
+        activity.startTime,
+        activity.endTime,
+      ],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
+// 删除活动阶段
+const deleteActivityStage = (activity) => {
+  const arr = [
+    {
+      sql: 'delete from activity_stage where stage_id=? and activity_id=?',
+      params: [activity.stageId, activity.activityId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
+// 提交活动总结
+const addactivityReport = (activity) => {
+  const arr = [
+    {
+      sql: 'update activity set activity_report=?,activity_state=2 where activity_id=?',
+      params: [activity.activityReport, activity.activityId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
+// 撤回活动总结
+const alteractivityReport = (activity) => {
+  const arr = [
+    {
+      sql: 'update activity set activity_report=?,activity_state=1 where activity_id=?',
+      params: [null, activity.activityId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 module.exports = {
   applyActivityAll,
   searchApplyActivity,
@@ -186,7 +244,13 @@ module.exports = {
   searchActivity,
   getClubActivityAll,
   getManageActivityAll,
-  activityIdClub,
+  activityIdInfo,
+  getActivityStage,
+  addActivityStage,
+  getStageInfo,
+  deleteActivityStage,
   memberActivityIdUserIdToBearName,
   teacherActivityIdUserIdToBearName,
+  addactivityReport,
+  alteractivityReport,
 }

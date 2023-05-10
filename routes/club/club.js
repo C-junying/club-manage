@@ -40,5 +40,7 @@ router.post('/searchClubMember', clubHandle.searchClubMember)
 router.post('/clubIdUserIdToBearName', clubHandle.clubIdUserIdToBearName)
 // 解散社团
 router.post('/clubDisband', clubHandle.clubDisband)
+// 撤回解散
+router.post('/alterclubDisband', clubHandle.alterclubDisband)
 
 module.exports = router
