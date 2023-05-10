@@ -85,8 +85,8 @@ const getManageCost = (userId) => {
 // 查社团的资金
 const getClubCost = (clubId) => {
   const sql =
-    'select DISTINCT bill.*,c.club_name as pay_name,club.club_name,user_name,SUM(price) as total from bill left join user on bill.user_id=user.user_id\
-     left join club on bill.source_id=club.club_id left join club  c on bill.pay_object=c.club_id left join project on bill.bill_id=project.bill_id \
+    'select DISTINCT bill.*,club.club_name,user_name,SUM(price) as total from bill left join user on bill.user_id=user.user_id\
+     left join club on bill.source_id=club.club_id  left join project on bill.bill_id=project.bill_id \
      where  bill_belong = ? GROUP BY bill_id'
   const params = [clubId]
   return BaseDao.execute(sql, params)
@@ -99,7 +99,14 @@ const getCostToProject = (billId) => {
   const params = [billId]
   return BaseDao.execute(sql, params)
 }
-
+// 返回支付名称
+const getPayName = (clubId) => {
+  const sql =
+    'select club.club_id,club_name,activity_id,activity_title from activity left join club on activity.club_id=club.club_id\
+    left join apply on activity.apply_id=apply.apply_id where (activity.club_id = ? or activity_id = ?) and apply_state=1 '
+  const params = [clubId, clubId]
+  return BaseDao.execute(sql, params)
+}
 // 测试
 const insertCost = (billList) => {
   const arr = [
@@ -120,5 +127,6 @@ module.exports = {
   getManageCost,
   getClubCost,
   getCostToProject,
+  getPayName,
   insertCost,
 }

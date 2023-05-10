@@ -104,6 +104,8 @@ exports.getClubCost = async (req, res) => {
   ret = ret.map((item) => {
     if (item['source_id'] === '000000') {
       item['source_name'] = '管理员'
+    } else {
+      item['source_name'] = item['club_name']
     }
     return item
   })
@@ -114,6 +116,18 @@ exports.getCostToProject = async (req, res) => {
   let bill = req.body || req.params
   let ret = await costDao.getCostToProject(bill.billId)
   res.json({ code: 200, data: ret })
+}
+// 返回支付名称
+exports.getPayName = async (req, res) => {
+  let bill = req.body || req.params
+  for (let i = 0; i < bill.length; i++) {
+    let ret = await costDao.getPayName(bill[i]['pay_object'])
+    if (ret[0]['club_id'] === bill[i]['pay_object']) bill[i]['pay_name'] = ret[0]['club_name']
+    else if (ret[0]['activity_id'] === bill[i]['pay_object']) {
+      bill[i]['pay_name'] = ret[0]['activity_title']
+    }
+  }
+  res.json({ code: 200, data: bill })
 }
 // 测试
 exports.insertCost = async (req, res) => {

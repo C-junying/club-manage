@@ -24,5 +24,17 @@ router.post('/releaseActivity', activityHandle.releaseActivity)
 
 // 删除申请活动记录
 router.post('/deleteApplyActivity', activityHandle.deleteApplyActivity)
+// 所有活动
+router.post('/getManageActivityAll', activityHandle.getManageActivityAll)
+// 查看活动 模糊查询
+router.post('/searchActivity', activityHandle.searchActivity)
 
+// 全校活动
+router.post('/getActivityAll', activityHandle.getActivityAll)
+// 查看activityId的社团信息
+router.post('/activityIdClub', activityHandle.activityIdClub)
+// 社团活动
+router.post('/getClubActivityAll', activityHandle.getClubActivityAll)
+// 根据activityId和userId查看当前用户在社团担任什么职位
+router.post('/activityIdUserIdToBearName', activityHandle.activityIdUserIdToBearName)
 module.exports = router

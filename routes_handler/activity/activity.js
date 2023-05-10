@@ -134,7 +134,7 @@ exports.auditApplyActivity = async (req, res) => {
 // 发布活动
 exports.releaseActivity = async (req, res) => {
   let activity = req.body || req.params
-  let ret = await activityDao.releaseActivity(activity.activityId, activity.activityState)
+  let ret = await activityDao.releaseActivity(activity.activityId, getNowTime(), activity.activityState)
   res.json({ code: 200, data: ret, msg: '发布成功' })
 }
 // 删除申请活动记录
@@ -145,4 +145,43 @@ exports.deleteApplyActivity = async (req, res) => {
   // 撤销申请活动
   await activityDao.deleteApplyActivity(apply.applyId, apply.activityId)
   res.json({ code: 200, msg: '撤销成功' })
+}
+// 所有活动
+exports.getManageActivityAll = async (req, res) => {
+  let ret = await activityDao.getManageActivityAll()
+  ret.sort((a, b) => b['apply_time'] - a['apply_time'])
+  res.json({ code: 200, data: ret })
+}
+// 查看活动 模糊查询
+exports.searchActivity = async (req, res) => {
+  let { keywords } = req.body || req.params
+  let ret = await activityDao.searchActivity(keywords)
+  ret.sort((a, b) => b['apply_time'] - a['apply_time'])
+  res.json({ code: 200, data: ret })
+}
+// 全校活动
+exports.getActivityAll = async (req, res) => {
+  let ret = await activityDao.getActivityAll()
+  ret.sort((a, b) => b['apply_time'] - a['apply_time'])
+  res.json({ code: 200, data: ret })
+}
+// 查看activityId的社团信息
+exports.activityIdClub = async (req, res) => {
+  let activity = req.body || req.params
+  let ret = await activityDao.activityIdClub(activity.activityId)
+  res.json({ code: 200, data: ret })
+}
+// 社团活动
+exports.getClubActivityAll = async (req, res) => {
+  let club = req.body || req.params
+  let ret = await activityDao.getClubActivityAll(club.clubId)
+  ret.sort((a, b) => b['apply_time'] - a['apply_time'])
+  res.json({ code: 200, data: ret })
+}
+// 根据activityId和userId查看当前用户在社团担任什么职位
+exports.activityIdUserIdToBearName = async (req, res) => {
+  let activity = req.body || req.params
+  let member = await activityDao.memberActivityIdUserIdToBearName(activity.activityId, req.auth.userId)
+  let taecher = await activityDao.teacherActivityIdUserIdToBearName(activity.activityId, req.auth.userId)
+  res.json({ code: 200, data: { member, taecher } })
 }

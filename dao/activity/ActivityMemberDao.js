@@ -3,8 +3,16 @@ const BaseDao = require('../BaseDao')
 // 查询某个活动的所有成员
 const activityIdAllMember = (activityId) => {
   const sql =
-    'select user.*,bear_name,appraise,join_time from activity_member left join user on activity_member.user_id=user.user_id where activity_id=?'
+    'select user.*,activity_member.* from activity_member left join user on activity_member.user_id=user.user_id where activity_id=?'
   const params = [activityId]
+  return BaseDao.execute(sql, params)
+}
+// 查询某个活动的所有成员 模糊查询
+const searchClubMember = (activityId, keywords) => {
+  const sql =
+    'select user.*,activity_member.* from activity_member left join user on activity_member.user_id=user.user_id \
+  where activity_id=? and CONCAT_WS("",user_name,phone) REGEXP ?'
+  const params = [activityId, keywords]
   return BaseDao.execute(sql, params)
 }
 // 查询活动内的某个用户
@@ -48,6 +56,7 @@ const deleteMember = (userId, activityId) => {
 
 module.exports = {
   activityIdAllMember,
+  searchClubMember,
   activityIdMember,
   addMember,
   updateMemberBear,

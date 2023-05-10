@@ -27,6 +27,8 @@ router.post('/getClubCost', costHandle.getClubCost)
 
 // 查看账单的详细信息
 router.post('/getCostToProject', costHandle.getCostToProject)
+// 返回支付名称
+router.post('/getPayName', costHandle.getPayName)
 // 测试
 router.post('/insertCost', costHandle.insertCost)
 module.exports = router

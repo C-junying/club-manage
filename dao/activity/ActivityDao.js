@@ -87,11 +87,11 @@ const auditApplyActivity = (applyActivity) => {
   return BaseDao.execTransection(arr)
 }
 // 发布活动
-const releaseActivity = (activityId, state) => {
+const releaseActivity = (activityId, time, state) => {
   const arr = [
     {
-      sql: 'update activity set activity_state=? where activity_id=?',
-      params: [state, activityId],
+      sql: 'update activity set release_time=?, activity_state=? where activity_id=?',
+      params: [time, state, activityId],
     },
   ]
   return BaseDao.execTransection(arr)
@@ -114,6 +114,65 @@ const deleteApplyActivity = (applyId, activityId) => {
   ]
   return BaseDao.execTransection(arr)
 }
+// 所有活动
+const getManageActivityAll = () => {
+  const sql =
+    'select area.area_id,apply_time,area_name,club_name,activity.*,activity_type.type_name,activity_type.picture as type_picture \
+  from activity left join apply on activity.apply_id = apply.apply_id left join area on apply.area_id=area.area_id \
+   left join club on activity.club_id=club.club_id left join activity_type on activity.type_id=activity_type.type_id \
+   where apply_state=1 and activity_state>=1 '
+  return BaseDao.execute(sql)
+}
+// 查看活动 模糊查询
+const searchActivity = (keywords) => {
+  const sql =
+    'select area.area_id,apply_time,area_name,club_name,activity.*,activity_type.type_name,activity_type.picture as type_picture\
+  from activity left join apply on activity.apply_id = apply.apply_id left join area on apply.area_id=area.area_id \
+   left join club on activity.club_id=club.club_id left join activity_type on activity.type_id=activity_type.type_id \
+  where apply_state=1 and activity_state>=1 and CONCAT_WS("",activity_title,club_name,type_name) REGEXP ?'
+  const params = [keywords]
+  return BaseDao.execute(sql, params)
+}
+// 全校活动
+const getActivityAll = () => {
+  const sql =
+    'select area_id,club_name,apply_time,activity.*,activity_type.picture as type_picture \
+  from activity left join apply on activity.apply_id = apply.apply_id left join club on activity.club_id=club.club_id\
+  left join activity_type on activity.type_id=activity_type.type_id \
+  where apply_state=1 and activity_state>=1 and activity_look=?'
+  const params = ['000000']
+  return BaseDao.execute(sql, params)
+}
+// 社团活动
+const getClubActivityAll = (clubId) => {
+  const sql =
+    'select area_id,club_name,apply_time,activity.*,activity_type.picture as type_picture,user_name,phone \
+  from activity left join apply on activity.apply_id = apply.apply_id left join club on activity.club_id=club.club_id\
+  left join activity_type on activity.type_id=activity_type.type_id \
+  left join user on apply.apply_user = user.user_id where apply_state=1 and activity_state>=1 and activity.club_id=?'
+  const params = [clubId]
+  return BaseDao.execute(sql, params)
+}
+// 查看activityId的社团信息
+const activityIdClub = (clubId) => {
+  const sql = 'select * from activity where activity_id = ?'
+  const params = [clubId]
+  return BaseDao.execute(sql, params)
+}
+// 根据activityId和userId查看当前用户在社团担任什么职位 成员
+const memberActivityIdUserIdToBearName = (activityId, userId) => {
+  const sql = 'select * from activity_member where activity_id=? and user_id=?'
+  const params = [activityId, userId]
+  return BaseDao.execute(sql, params)
+}
+// 根据activityId和userId查看当前用户在社团担任什么职位 老师
+const teacherActivityIdUserIdToBearName = (activityId, userId) => {
+  const sql =
+    'select * from bear left join teacher on bear.teacher_id=teacher.teacher_id where bear_id=? and user_id=?'
+  const params = [activityId, userId]
+  return BaseDao.execute(sql, params)
+}
+
 module.exports = {
   applyActivityAll,
   searchApplyActivity,
@@ -123,4 +182,11 @@ module.exports = {
   auditApplyActivity,
   releaseActivity,
   deleteApplyActivity,
+  getActivityAll,
+  searchActivity,
+  getClubActivityAll,
+  getManageActivityAll,
+  activityIdClub,
+  memberActivityIdUserIdToBearName,
+  teacherActivityIdUserIdToBearName,
 }
