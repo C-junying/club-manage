@@ -124,6 +124,26 @@ const checkPhoneName = (userName, phone) => {
   const params = [userName, phone]
   return BaseDao.execute(sql, params)
 }
+// 更新当前用户信息
+const updateCurrentUser = (user) => {
+  const arr = [
+    {
+      sql: 'update user set nickname=?,user_name=?,sex=?,phone=?,email=?,picture=?,intro=?,regist_time=? where user_id=?',
+      params: [
+        user.nickname,
+        user.userName,
+        user.sex,
+        user.phone,
+        user.email,
+        user.picture,
+        user.intro,
+        user.createTime,
+        user.userId,
+      ],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 module.exports = {
   queryAll,
   getCount,
@@ -136,4 +156,5 @@ module.exports = {
   updateUser,
   getSearch,
   checkPhoneName,
+  updateCurrentUser,
 }

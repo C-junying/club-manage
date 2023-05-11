@@ -30,6 +30,11 @@ exports.getUserId = async (req, res) => {
   console.log(ret)
   res.json({ code: 200, data: ret[0] })
 }
+// 查看当前用户的信息
+exports.getUserInfo = async (req, res) => {
+  let ret = await userDao.getUserId(req.auth.userId)
+  res.json({ code: 200, data: ret[0] })
+}
 // 模糊查询
 exports.getSearch = async (req, res) => {
   let { keywords } = req.body || req.params
@@ -109,6 +114,17 @@ exports.update = async (req, res) => {
     res.json({ code: 200, data: ret, msg: '用户编辑成功' })
   }
 }
+// 更新当前用户信息
+exports.updateCurrentUser = async (req, res) => {
+  let user = req.body || req.params
+  let check = await userDao.login(user)
+  if (check.length > 0 && check[0]['user_id'] !== user.userId) {
+    res.json({ code: '3007', msg: '该手机或邮箱已注册' })
+  } else {
+    let ret = await userDao.updateCurrentUser(user)
+    res.json({ code: 200, data: ret, msg: '用户更新成功' })
+  }
+}
 // 修改密码
 exports.updatePassword = async (req, res) => {
   let user = req.body || req.params
@@ -121,5 +137,6 @@ exports.updatePassword = async (req, res) => {
 }
 // 获取token中的信息
 exports.getToken = async (req, res) => {
+  console.log(req.user)
   res.json({ code: 200, data: req.auth })
 }

@@ -35,6 +35,15 @@ exports.addMember = async (req, res) => {
     res.json({ code: 3200, msg: '不存在该用户' })
   }
 }
+// 参加活动
+exports.userJoinMember = async (req, res) => {
+  let member = req.body || req.params
+  member.userId = req.auth.userId
+  member.bearName = '成员'
+  member.joinTime = getNowTime()
+  let ret = await memberDao.addMember(member)
+  res.json({ code: 200, data: ret, msg: '参加成功' })
+}
 // 更新成员职位
 exports.updateMemberBear = async (req, res) => {
   let member = req.body || req.params

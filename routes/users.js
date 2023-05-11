@@ -10,6 +10,8 @@ router.post('/test', usersHandle.test)
 router.post('/queryAll', usersHandle.allUser)
 // 查看某个用户的信息
 router.post('/getUserId', usersHandle.getUserId)
+// 查看当前用户的信息
+router.post('/getUserInfo', usersHandle.getUserInfo)
 // 模糊查询
 router.post('/getSearch', usersHandle.getSearch)
 // 分页
@@ -22,6 +24,8 @@ router.post('/login', usersHandle.login)
 router.post('/delete', usersHandle.delete)
 // 编辑用户
 router.post('/update', usersHandle.update)
+// 更新当前用户信息
+router.post('/updateCurrentUser', usersHandle.updateCurrentUser)
 // 修改密码
 router.post('/updatePassword', usersHandle.updatePassword)
 // 获取token中的信息
