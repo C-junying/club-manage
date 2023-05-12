@@ -190,6 +190,11 @@ const clubDisband = (clubId) => {
       sql: 'update club set state=? where club_id=?',
       params: [2, clubId],
     },
+    {
+      sql: 'update area set status=1 where area_id in (select apply.area_id from club \
+        left join apply on club.apply_id=apply.apply_id where club_id=?)',
+      params: [clubId],
+    },
   ]
   return BaseDao.execTransection(arr)
 }
@@ -199,6 +204,11 @@ const alterclubDisband = (clubId) => {
     {
       sql: 'update club set state=? where club_id=?',
       params: [1, clubId],
+    },
+    {
+      sql: 'update area set status=2 where area_id in (select apply.area_id from club \
+        left join apply on club.apply_id=apply.apply_id where club_id=?)',
+      params: [clubId],
     },
   ]
   return BaseDao.execTransection(arr)

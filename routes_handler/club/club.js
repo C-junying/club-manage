@@ -46,7 +46,7 @@ exports.clubIdApplyClub = async (req, res) => {
 exports.addApplyClub = async (req, res) => {
   // 获取数据
   let clubApply = req.body || req.params
-  // 添加数据
+  // 设置数据信息
   clubApply.applyInfo.applyId = uuid()
   clubApply.applyInfo.applyTime = getNowTime()
   clubApply.clubInfor.clubId = uuid()
@@ -69,7 +69,9 @@ exports.auditApplyClub = async (req, res) => {
   let apply = req.body || req.params
   // 记录时间
   apply.replyTime = getNowTime()
+  // 执行审核
   let ret = await clubDao.auditApplyClub(apply)
+  // 审核通过
   if (apply.applyState === 1) {
     await memberDao.addMember({
       userId: apply.userId,
@@ -79,7 +81,9 @@ exports.auditApplyClub = async (req, res) => {
       joinTime: apply.replyTime,
     })
     res.json({ code: 200, data: ret, msg: '审核成功' })
+    // 审核不通过
   } else {
+    // 撤销之前社团占用的场地
     await areaDao.occupyArea(1, apply.areaId)
     res.json({ code: 3200, data: ret, msg: '驳回成功' })
   }
@@ -87,6 +91,7 @@ exports.auditApplyClub = async (req, res) => {
 // 发布社团
 exports.releaseClub = async (req, res) => {
   let club = req.body || req.params
+  // 修改状态
   let ret = await clubDao.releaseClub(club.applyId, club.state)
   res.json({ code: 200, data: ret, msg: '发布成功' })
 }
@@ -132,10 +137,12 @@ exports.updateClubInfo = async (req, res) => {
   let ret = await clubDao.updateClubInfo(club)
   res.json({ code: 200, data: ret, msg: '更新成功' })
 }
-// 查看社团有哪些社团成员
+// 查看社团有哪些成员
 exports.getClubMember = async (req, res) => {
   let club = req.body || req.params
+  // 获取社团成员信息
   let member = await clubDao.getClubMember(club.clubId)
+  // 获取社团担任老师的信息
   let teacher = await teacherDao.clubIdTeacher(club.clubId)
   res.json({ code: 200, data: [...teacher, ...member] })
 }

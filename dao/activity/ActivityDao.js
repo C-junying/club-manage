@@ -218,6 +218,11 @@ const addactivityReport = (activity) => {
       sql: 'update activity set activity_report=?,activity_state=2 where activity_id=?',
       params: [activity.activityReport, activity.activityId],
     },
+    {
+      sql: 'update area set status=1 where area_id in (select apply.area_id from activity \
+        left join apply on activity.apply_id=apply.apply_id where activity_id=?)',
+      params: [activity.activityId],
+    },
   ]
   return BaseDao.execTransection(arr)
 }
@@ -227,6 +232,11 @@ const alteractivityReport = (activity) => {
     {
       sql: 'update activity set activity_report=?,activity_state=1 where activity_id=?',
       params: [null, activity.activityId],
+    },
+    {
+      sql: 'update area set status=2 where area_id in (select apply.area_id from activity \
+        left join apply on activity.apply_id=apply.apply_id where activity_id=?)',
+      params: [activity.activityId],
     },
   ]
   return BaseDao.execTransection(arr)
