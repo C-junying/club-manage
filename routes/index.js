@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-// 核心路由
+// 管理路由,导入所有的路由
 // 自定义模块
 const homeRouter = require('./home')
 // 用户模块
