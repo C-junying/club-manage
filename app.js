@@ -8,7 +8,7 @@ const cors = require('cors')
 
 // 导入路由
 const indexRouter = require('./routes/index')
-
+// 建立express
 var app = express()
 
 app.use(logger('dev'))
