@@ -5,7 +5,7 @@ var router = express.Router()
 const usersHandle = require('../routes_handler/users')
 
 // 测试
-router.post('/test', usersHandle.test)
+router.get('/test', usersHandle.test)
 // 查看所有用户
 router.post('/queryAll', usersHandle.allUser)
 // 查看某个用户的信息
