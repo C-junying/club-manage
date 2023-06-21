@@ -30,5 +30,6 @@ router.post('/updateCurrentUser', usersHandle.updateCurrentUser)
 router.post('/updatePassword', usersHandle.updatePassword)
 // 获取token中的信息
 router.post('/getToken', usersHandle.getToken)
-
+// 测试execAllTransection
+router.post('/testExecAllTransection', usersHandle.testExecAllTransection)
 module.exports = router

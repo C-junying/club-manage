@@ -75,5 +75,49 @@ const execTransection = (sqlArr) => {
     })
   })
 }
+// 多条execTransection
+// execTransectionArr格式：[{func:函数引用, params:[param,param]}]
+const execAllTransection = (execTransectionArr) => {
+  return new Promise((resolve, reject) => {
+    var promiseArr = []
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        return reject(err)
+      }
+      connection.beginTransaction((err) => {
+        if (err) {
+          return reject('开启事务失败')
+        }
+        // 将所有需要执行的execTransection封装为数组
+        promiseArr = execTransectionArr.map(({ func, params }) => {
+          console.log(func, params)
+          return new Promise((resolve, reject) => {
+            func(...params)
+              .then((res) => resolve(res))
+              .catch((err) => reject(err))
+          })
+        })
+        // Promise调用所有execTransection，一旦出错，回滚，否则，提交事务并释放链接
+        Promise.all(promiseArr)
+          .then((res) => {
+            connection.commit((error) => {
+              if (error) {
+                console.log('事务提交失败')
+                reject(error)
+              }
+            })
+            connection.release() // 释放链接
+            resolve(res)
+          })
+          .catch((err) => {
+            connection.rollback(() => {
+              console.log('数据操作回滚')
+            })
+            reject(err)
+          })
+      })
+    })
+  })
+}
 
-module.exports = { execute, execTransection }
+module.exports = { execute, execTransection, execAllTransection }

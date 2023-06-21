@@ -11,6 +11,7 @@ const userDao = require('../dao/UserDao')
 const { uuid, getNowTime } = require('../utils/myStr')
 // 把数据库格式转为驼峰
 const { toHump } = require('../utils/toHump')
+const { execAllTransection } = require('../dao/BaseDao')
 
 // 路由处理函数
 // 测试
@@ -139,4 +140,14 @@ exports.updatePassword = async (req, res) => {
 exports.getToken = async (req, res) => {
   console.log(req.user)
   res.json({ code: 200, data: req.auth })
+}
+// 测试execAllTransection
+exports.testExecAllTransection = async (req, res) => {
+  let user1 = { userName: 'as', createTime: getNowTime(), userId: 'as' }
+  let user2 = { userName: 'as', createTime: getNowTime(), userId: 'qw' }
+  let ret = await execAllTransection([
+    { func: userDao.testExecAllTransection, params: [user1] },
+    { func: userDao.testExecAllTransection, params: [user2] },
+  ])
+  res.json({ code: 200, data: ret, msg: '修改成功' })
 }

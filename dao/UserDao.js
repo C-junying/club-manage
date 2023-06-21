@@ -144,6 +144,16 @@ const updateCurrentUser = (user) => {
   ]
   return BaseDao.execTransection(arr)
 }
+// 测试execAllTransection
+const testExecAllTransection = (user) => {
+  const arr = [
+    {
+      sql: 'update user set user_name=?,regist_time=? where user_id=?',
+      params: [user.userName, user.createTime, user.userId],
+    },
+  ]
+  return BaseDao.execTransection(arr)
+}
 module.exports = {
   queryAll,
   getCount,
@@ -157,4 +167,5 @@ module.exports = {
   getSearch,
   checkPhoneName,
   updateCurrentUser,
+  testExecAllTransection,
 }
