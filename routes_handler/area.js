@@ -34,7 +34,7 @@ exports.addArea = async (req, res) => {
     res.json({ code: 3100, msg: '场地添加失败，场地名重复' });
     return;
   }
-  console.log('Hello');
+  // console.log('Hello');
   area.areaId = uuid();
   area.registTime = getNowTime();
   let ret = await areaDao.addArea(area);
