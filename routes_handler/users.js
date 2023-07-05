@@ -139,7 +139,7 @@ exports.updatePassword = async (req, res) => {
 };
 // 获取token中的信息
 exports.getToken = async (req, res) => {
-  console.log(req.user);
+  console.log(req.auth);
   res.json({ code: 200, data: req.auth });
 };
 // 测试execAllTransection
