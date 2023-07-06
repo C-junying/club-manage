@@ -74,6 +74,12 @@ const deleteUser = (user) => {
   ];
   return BaseDao.execTransection(arr);
 };
+// 忘记密码
+const resetPassword = (user) => {
+  const sql = 'select * from user where user_name=? and phone=?';
+  const params = [user.userName, user.phone];
+  return BaseDao.execute(sql, params);
+};
 // 修改密码
 const updatePassword = (user) => {
   const arr = [
@@ -163,6 +169,7 @@ module.exports = {
   login,
   register,
   deleteUser,
+  resetPassword,
   updatePassword,
   updateUser,
   getSearch,

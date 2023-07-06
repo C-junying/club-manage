@@ -28,6 +28,7 @@ app.use(
   }).unless({
     path: [
       '/users/login',
+      '/users/resetPassword',
       '/users/register',
       '/activity/getManageActivityAll',
       '/club/getClubsAll',

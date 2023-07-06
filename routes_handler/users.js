@@ -137,6 +137,22 @@ exports.updatePassword = async (req, res) => {
   let ret = await userDao.updatePassword(user);
   res.json({ code: 200, data: ret, msg: '修改成功' });
 };
+// 忘记密码
+exports.resetPassword = async (req, res) => {
+  let user = req.body || req.params;
+  let check = await userDao.resetPassword(user);
+  if (check.length === 0) {
+    res.json({ code: 3100, msg: '没有该用户' });
+  } else {
+    // 设置加密强度
+    let salt = bcryptc.genSaltSync(10);
+    // 用bcrypt加密
+    user.password = bcryptc.hashSync(user.password, salt);
+    user.userId = check[0]['user_id'];
+    let ret = await userDao.updatePassword(user);
+    res.json({ code: 200, data: ret, msg: '更新成功' });
+  }
+};
 // 获取token中的信息
 exports.getToken = async (req, res) => {
   console.log(req.auth);
